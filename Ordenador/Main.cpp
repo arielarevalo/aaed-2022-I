@@ -29,7 +29,7 @@ using Timestamp = chrono::steady_clock::time_point;
 
 static const size_t NUM_ARRAYS{ 4 };
 static const size_t NUM_ALGOS{ 3 };
-static const size_t NUM_REPS{ 3 };
+static const size_t NUM_REPS{ 5 };
 
 void initialize(SortingArray arrays[NUM_ARRAYS]);
 void takeTimes(long long times[NUM_REPS][NUM_ALGOS][NUM_ARRAYS]);
@@ -65,12 +65,12 @@ int main() {
     initialize(arrays);
 
     for (size_t i = 0; i < NUM_REPS; ++i) {
-        cout << "----------------------------------------------------" << endl;
-        cout << "Repetition " << to_string(i + 1) << ":" << endl;
-        cout << "----------------------------------------------------" << endl;
+        cout << "-----------------------------------------------------------------" << endl;
+        cout << " Repetition " << to_string(i + 1) << ":" << endl;
+        cout << "-----------------------------------------------------------------" << endl;
 
         for (size_t j = 0; j < NUM_ALGOS; ++j) {
-            cout << algorithms[j].name << ": | ";
+            cout << "   " << algorithms[j].name << ": | ";
 
             fillArrays(arrays);
 
