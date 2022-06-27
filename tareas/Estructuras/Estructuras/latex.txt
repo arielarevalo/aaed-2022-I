@@ -1,0 +1,6 @@
+Radix Sort
+ & $50$ & $2$ & $1$ & $1$ & $1$ & $1$ & $1$\tabularnewline
+ & $100$ & $3$ & $3$ & $3$ & $3$ & $3$ & $3$\tabularnewline
+ & $150$ & $5$ & $5$ & $5$ & $5$ & $5$ & $5$\tabularnewline
+ & $200$ & $6$ & $6$ & $6$ & $6$ & $6$ & $6$\tabularnewline
+\midrule
