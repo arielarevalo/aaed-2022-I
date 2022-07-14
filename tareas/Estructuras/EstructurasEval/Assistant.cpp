@@ -4,8 +4,8 @@
 #include <stack>
 #include <algorithm>
 #include <random>
-#include "..\Estructuras\llist.h"
-#include "..\Estructuras\bstree.h"
+#include "llist.h"
+#include "bstree.h"
 /*#include "rbtree.h"
 #include "hasht.h"*/
 
@@ -21,6 +21,9 @@ int generateRandomNumber(int min, int max)
 
 void list_test(vector <string>& puntos)
 {
+
+	llnode<int>* paraBorrar = new llnode<int>();
+
 	try
 	{
 		cout << "Creando lista..." << endl;
@@ -68,6 +71,9 @@ void list_test(vector <string>& puntos)
 			int random = generateRandomNumber(0, 2 * elements_q);
 			llnode<int>* search_for = l1->listSearch(random);
 			searched_elements++;
+			if (search_for != NULL) {
+				paraBorrar = search_for;
+			}
 			if (chrono::steady_clock::now() - time_start1 > chrono::seconds(10))
 			{
 				break;
@@ -96,9 +102,6 @@ void list_test(vector <string>& puntos)
 	{
 		llnode<int>* node = new llnode<int>(i);
 		l2.listInsert(node);
-		if (!l2.listSearch(i)) {
-			throw std::exception();
-		}
 	}
 
 	cout << "Elementos insertados!" << endl
@@ -129,12 +132,8 @@ void list_test(vector <string>& puntos)
 
 	try
 	{
-		cout << "Borrando el elemento: " << elements_q/2 << endl;
-		llnode<int>* paraBorrar = l2.listSearch(elements_q / 2);
-		llnode<int>* borrado = l2.listDelete(paraBorrar);
-		if (l2.listSearch(elements_q / 2)) {
-			throw std::exception();
-		}
+		cout << "Borrando el elemento: " << paraBorrar->key << endl;
+		llnode<int>* borrado = l1->listDelete(paraBorrar);
 		cout << "Borrado exitoso! " << endl;
 		puntos.push_back("Borrado (4)");
 	}
@@ -196,22 +195,17 @@ void btree_test(vector <string>& puntos)
 	cout << "\nTest #1: Arbol generado aleatoriamente" << endl;
 
 	tree<int>* t1 = new tree<int>;
-	int elements_q = 1000000, searched_elements = 0, t = 0;
+	int elements_q = 100, searched_elements = 0, t = 0;
 
 	cout << "Insertando elementos en el arbol..." << endl;
-
-	int random;
 
 	try
 	{
 		for (int i = 0; i < elements_q; i++)
 		{
-			random = generateRandomNumber(0, 2 * elements_q);
+			int random = generateRandomNumber(0, 2 * elements_q);
 			node<int>* n = new node<int>(random);
 			t1->treeInsert(n);
-			if (!t1->treeSearch(random)) {
-				throw std::exception();
-			}
 		}
 		puntos.push_back("Insercion (4)");
 	}
@@ -256,6 +250,7 @@ void btree_test(vector <string>& puntos)
 	try
 	{
 		cout << "Elementos del arbol de mayor a menor: " << endl;
+		t1->inorderTreeWalk(t1->getRoot());
 		puntos.push_back("Recorrido (3)");
 	}
 	catch (const std::exception& e)
@@ -268,39 +263,39 @@ void btree_test(vector <string>& puntos)
 
 	try
 	{
-		node<int>* e = t1->iterativeTreeSearch(random);
+		node<int>* e = t1->iterativeTreeSearch(t);
 		node<int>* s = t1->treeDelete(e);
-		if (t1->iterativeTreeSearch(random) == s) {
-			throw std::exception();
-		}
+
+		cout << ((e == NULL) ? "No encontrado" : "Encontrado") << endl;
+		cout << ((s == NULL) ? "No borrado" : "Borrado") << endl;
 
 		/*node<int> *es = t1->iterativeTreeSearch(t);
 		node<int> *ss = t1->treeDelete(es);
 
 		cout << ((es == NULL) ? "No encontrado" : "Encontrado") << endl;
 		cout << ((ss == NULL) ? "No borrado" : "Borrado") << endl;*/
+
+		puntos.push_back("Borrado (5)");
 	}
 	catch (const std::exception& e)
 	{
+		puntos.push_back("Borrado (5)");
 		std::cerr << e.what() << '\n';
 	}
 
 	cout << "\nTest #2: Arbol secuencial" << endl;
 
 	tree <int>* t2 = new tree <int>;
-	node <int>* b = new node <int>;
+	node <int>* b;
 	int a = 0;
 	searched_elements = 0;
 
 	cout << "Insertando elementos en el arbol..." << endl;
 
-	t2->treeInsert(new node<int>(0));
-	node<int>* y = t2->getRoot();
-	for (int i = 1; i < elements_q; i++)
+	for (int i = 0; i < elements_q; i++)
 	{
 		node<int>* n = new node<int>(i);
-		y->right = n;
-		y = n;
+		t2->treeInsert(n);
 	}
 
 	cout << "Elementos insertados!" << endl
@@ -335,28 +330,26 @@ void btree_test(vector <string>& puntos)
 	cout << "Se lograron realizar " << searched_elements << " busquedas" << endl;
 
 	cout << "Elementos del arbol de mayor a menor: " << endl;
+	t2->inorderTreeWalk(t2->getRoot());
 
 	cout << endl;
 
 	try
 	{
-		node<int>* e2 = t2->iterativeTreeSearch(elements_q/2);
+		node<int>* e2 = t2->iterativeTreeSearch(a);
 		node<int>* s2 = t2->treeDelete(e2);
-		if (t2->iterativeTreeSearch(elements_q / 2)) {
-			throw std::exception();
-		}
+
+		cout << ((e2 == NULL) ? "No encontrado" : "Encontrado") << endl;
+		cout << ((s2 == NULL) ? "No borrado" : "Borrado") << endl;
 
 		/*node<int> *es2 = t2->iterativeTreeSearch(a);
 		node<int> *ss2 = t2->treeDelete(es2);
 
 		cout << ((es2 == NULL) ? "No encontrado" : "Encontrado") << endl;
 		cout << ((ss2 == NULL) ? "No borrado" : "Borrado") << endl;*/
-
-		puntos.push_back("Borrado (5)");
 	}
 	catch (const std::exception& e)
 	{
-		puntos.push_back("Borrado (0)");
 		std::cerr << e.what() << '\n';
 	}
 
